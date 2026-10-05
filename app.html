@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GoRIDE – Tamil Nadu Rides</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@600;800&family=Hind+Madurai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f3f1;--ink:#111;--card:#fff;--line:#e2e2de;--gold:#FFD11A;--red:#E5303F;--ok:#0E9F6E;--mut:#666;--chip:#fff6c9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 'Hind Madurai',system-ui,sans-serif}
+h1,h2,h3{font-family:'Baloo Thambi 2','Hind Madurai',sans-serif;margin:0;line-height:1.15}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:8px;background:var(--gold);color:#111}
+.logo{font:800 26px 'Baloo Thambi 2';display:flex;align-items:center;gap:8px}
+.logo small{font:500 12px 'Hind Madurai';color:var(--mut);display:block;margin-top:-6px}
+main{max-width:720px;margin:0 auto;padding:0 14px 96px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+button{font:600 16px 'Hind Madurai';cursor:pointer;border:0;border-radius:12px;padding:12px 16px;background:var(--ink);color:var(--bg)}
+button.go{background:var(--gold);color:#111;width:100%;font-size:18px;margin-top:12px}
+button.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);padding:8px 12px;font-size:14px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.tabs{display:flex;gap:8px;margin-bottom:6px}
+.tabs button{flex:1;background:var(--chip);color:var(--ink)}
+.tabs .on{background:var(--ink);color:var(--bg)}
+.hero{padding:22px 4px 6px}
+.hero h1{font-size:clamp(30px,8vw,46px)}
+.hero p{color:var(--mut);margin:6px 0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.loc{font-size:13px;color:var(--mut);margin-top:6px}
+.veh{display:grid;gap:8px}
+.v{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;cursor:pointer;background:var(--bg);width:100%;text-align:left;color:var(--ink)}
+.v[aria-pressed=true]{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold) inset}
+.v .e{font-size:28px}
+.v div{flex:1}
+.v small{color:var(--mut);display:block;font-weight:400}
+.v strong{font:800 20px 'Baloo Thambi 2'}
+.offers{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.o{min-width:210px;border:2px dashed var(--gold);border-radius:14px;padding:12px;background:var(--chip);text-align:left;color:var(--ink)}
+.o b{font:800 18px 'Baloo Thambi 2';display:block}
+.o span{font-size:13px;color:var(--mut);display:block}
+.o em{font-style:normal;font-weight:600;color:var(--red)}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}
+.sum .t{border-top:2px dashed var(--line);margin-top:6px;padding-top:8px;font:800 24px 'Baloo Thambi 2'}
+.ver{color:var(--ok);font-size:13px;font-weight:600}
+.err{color:var(--red);font-size:14px;min-height:20px}
+.ride{border-left:6px solid var(--gold)}
+.st{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--chip);font-size:13px;font-weight:600}
+.otp{font:800 22px 'Baloo Thambi 2';letter-spacing:4px;color:var(--red)}
+.hide{display:none}
+#bn{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1.5px solid var(--line);padding:6px;z-index:8}
+#bn button{flex:1;background:transparent;color:var(--ink);font-size:14px}
+.toast{position:fixed;left:12px;right:12px;bottom:80px;background:var(--ink);color:var(--bg);padding:12px 14px;border-radius:14px;max-width:500px;margin:auto;z-index:9}
+dialog{border:2px solid var(--gold);border-radius:18px;background:var(--card);color:var(--ink);max-width:460px;width:92%}
+.mail{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:14px;white-space:pre-line}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121212;--ink:#fff;--card:#1e1e1e;--line:#333;--mut:#a0a0a0;--chip:#2a2a2a}}
+:root[data-theme="dark"]{--bg:#121212;--ink:#fff;--card:#1e1e1e;--line:#333;--mut:#a0a0a0;--chip:#2a2a2a}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🛺 <div>GoRIDE<small>Bike · Auto · Cab across Tamil Nadu</small></div></div>
+<div><span class="st hide" id="coins">🪙 0</span> <button class="ghost" id="theme">🌓</button> <button class="ghost hide" id="out">Sign out</button></div>
+</header>
+<main>
+<section id="auth">
+<div class="hero"><h1>Ride anywhere<br>in Tamil Nadu.</h1><p>Chennai to Kanyakumari – 30 cities, verified fares, private location.</p></div>
+<div class="card">
+<div class="tabs"><button id="tUp" class="on">Sign up</button><button id="tIn">Sign in</button></div>
+<div id="nmW"><label>Name</label><input id="nm"></div>
+<label>Mobile Number</label>
+<input id="phone" type="tel"
+placeholder="Mobile Number" maxlength="10">
+<label>Password (min 8 characters)</label>
+<input id="pw" type="password">
+<div class="err" id="aerr"></div>
+<button class="go" id="aGo">Create account</button>
+<p class="loc">🔒 Passwords are stored as PBKDF2 hashes, never in plain text. Location data stays on your device.</p>
+</div>
+</section>
+<section id="app" class="hide">
+<div class="hero"><h1 id="hi"></h1><p>Where to?</p></div>
+<div class="card">
+<div class="route">
+<div class="dot"><i></i><b></b></div>
+<div>
+<h3>Pickup</h3>
+<div class="row">
+<div><label>City</label><select id="fc"></select></div>
+<div><label>Area</label><select id="fa"></select></div>
+</div>
+<button class="ghost" id="loc">📍 Use my location</button>
+<div class="loc" id="locT">Location is requested only when you tap the button.</div>
+</div>
+<div class="dot"><i class="d"></i></div>
+<div>
+<h3>Drop</h3>
+<div class="row">
+<div><label>City</label><select id="tc"></select></div>
+<div><label>Area</label><select id="ta"></select></div>
+</div>
+</div>
+</div>
+</div>
+<div class="card">
+<h3>Vehicle & price</h3>
+<p class="loc" id="dist"></p>
+<div class="veh" id="veh"></div>
+</div>
+<div class="card">
+<h3>Offers 🎁</h3>
+<div class="offers" id="offers"></div>
+</div>
+<div class="card sum" id="sum"></div>
+<div class="card">
+<label>Pay with</label>
+<select id="pm">
+<option>Cash</option>
+<option>UPI</option>
+<option>Ride Wallet</option>
+</select>
+</div>
+<div class="err" id="berr"></div>
+<button class="go" id="book">Book ride</button>
+<h2 style="margin-top:28px">My rides</h2>
+<div id="rides"><p class="loc">No rides yet.</p></div>
+</section>
+</main>
+<nav id="bn" class="hide">
+<button data-go="hi">🛵 Book</button>
+<button data-go="offersC">🎁 Offers</button>
+<button data-go="rides">🧾 Rides</button>
+</nav>
+<div class="toast hide" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id),mem={};
+const S={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+const C={"Chennai":[13.08,80.27,["T Nagar","Adyar","Anna Nagar","Airport (MAA)"]],"Coimbatore":[11.02,76.96,["Gandhipuram","RS Puram","Peelamedu","Airport (CJB)"]],"Madurai":[9.92,78.12,["Meenakshi Temple","Anna Nagar","Thirunagar","Airport (IXM)"]],"Tiruchirappalli":[10.79,78.7,["Srirangam","Central Bus Stand","Thillai Nagar"]],"Salem":[11.66,78.15,["Five Roads","Hasthampatti","Fairlands"]],"Tirunelveli":[8.73,77.7,["Junction","Palayamkottai","Melapalayam"]],"Erode":[11.34,77.72,["Brough Road","Perundurai","Bus Stand"]],"Vellore":[12.92,79.13,["Katpadi","Fort","Gandhi Nagar"]],"Thoothukudi":[8.76,78.13,["Harbour","Beach Road","Millerpuram"]],"Thanjavur":[10.79,79.14,["Big Temple","Old Bus Stand","Medical College Rd"]],"Dindigul":[10.37,77.98,["Rock Fort","Bus Stand","Palani Road"]],"Kanyakumari":[8.09,77.54,["Sunset Point","Vivekananda Rock Jetty","Beach Road"]],"Nagercoil":[8.18,77.43,["Vadasery","Kottar","Court Road"]],"Rameswaram":[9.29,79.31,["Ramanathaswamy Temple","Pamban Bridge","Dhanushkodi Road"]],"Ooty":[11.41,76.7,["Botanical Garden","Charing Cross","Lake"]],"Kodaikanal":[10.24,77.49,["Lake","Coaker's Walk","Bryant Park"]],"Kanchipuram":[12.83,79.7,["Ekambareswarar","Bus Stand","Sriperumbudur"]],"Mahabalipuram":[12.62,80.19,["Shore Temple","Five Rathas","ECR Beach"]],"Tiruppur":[11.11,77.34,["Kumaran Road","Avinashi Road","Pushpa Theatre"]],"Karur":[10.96,78.08,["Bus Stand","Thanthonimalai","Vangal"]],"Hosur":[12.74,77.83,["SIPCOT","Bagalur Road","Bus Stand"]],"Cuddalore":[11.75,79.77,["Silver Beach","Manjakuppam","Port"]],"Kumbakonam":[10.96,79.38,["Mahamaham Tank","Darasuram","Bus Stand"]],"Namakkal":[11.22,78.17,["Anjaneyar Temple","Fort","Bus Stand"]],"Tiruvannamalai":[12.23,79.07,["Arunachaleswarar Temple","Girivalam Path","Bus Stand"]],"Pollachi":[10.66,77.01,["Market","Aliyar Dam","Valparai Road"]],"Sivakasi":[9.45,77.8,["Bus Stand","Printing Press Area","Virudhunagar Road"]],"Palani":[10.45,77.52,["Murugan Temple","Bus Stand","Idumban Hill"]],"Pudukkottai":[10.38,78.82,["Bus Stand","Gandhi Park","Museum Road"]],"Virudhunagar":[9.59,77.96,["Railway Station","Bus Stand","Aruppukottai Road"]]};
+const V=[{id:"bike",n:"Bike Taxi",e:"🏍️",b:15,k:7,s:"1 pax · fastest in traffic"},{id:"auto",n:"Auto",e:"🛺",b:30,k:14,s:"3 pax · local favourite"},{id:"mini",n:"Mini Cab",e:"🚗",b:50,k:13,s:"4 pax · AC"},{id:"sedan",n:"Sedan",e:"🚘",b:70,k:17,s:"4 pax · AC + boot space"},{id:"suv",n:"SUV / Innova",e:"🚙",b:100,k:22,s:"6 pax · family trips"}];
+const TEMPLE=["Madurai","Rameswaram","Thanjavur","Kanyakumari","Palani","Tiruvannamalai","Kumbakonam","Kanchipuram"];
+const O=[{c:"PONGAL15",t:"Pongal Special",d:"15% off, max ₹120",min:150,ok:()=>true,f:f=>Math.min(f*.15,120)},{c:"FIRSTRIDE",t:"First ride offer",d:"₹50 off your first ride",min:100,ok:()=>!user||!user.rides||user.rides.length===0,f:()=>50},{c:"TEMPLE100",t:"Temple town trip",d:"₹100 off, 50+ km to temple towns",min:300,ok:s=>s.km>=50&&TEMPLE.includes(s.tc),f:()=>100},{c:"NIGHT10",t:"Night Owl",d:"10% off, 10 PM – 5 AM",min:100,ok:()=>{const h=new Date().getHours();return h>=22||h<5},f:f=>Math.min(f*.1,80)}];
+let user=null,veh="auto",off=null,rides=[];
+const R=(a,b)=>{const r=Math.PI/180,x=Math.sin((b[0]-a[0])*r/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin((b[1]-a[1])*r/2)**2;return 12742*Math.asin(Math.sqrt(x))};
+const hs=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.remove("hide");clearTimeout(toast.i);toast.i=setTimeout(()=>t.classList.add("hide"),4000)};
+function trip(){const fc=$("fc").value,tc=$("tc").value,fa=$("fa").value,ta=$("ta").value;let km;if(fc===tc){km=fa===ta?0:3+hs(fc+[fa,ta].sort().join())%10}else km=Math.round(R(C[fc],C[tc])*1.25);return{fc,tc,fa,ta,km}}
+function fare(v,km){const h=new Date().getHours(),peak=(h>=7&&h<=10)||(h>=17&&h<=20),night=h>=22||h<5;let m=1+(peak?.15:0)+(night?.2:0);let base=v.b+v.k*km;const toll=km>60?Math.floor(km/60)*55:0;let t=Math.round(base*m+toll);return{base:Math.round(base),sur:Math.round(base*m-base),toll,total:t,peak,night}}
+function disc(f,s){if(!off)return 0;const o=O.find(x=>x.c===off);if(!o||f<o.min||!o.ok(s))return 0;return Math.round(Math.min(o.f(f),f*.4))}
+function calc(){const s=trip(),v=V.find(x=>x.id===veh),f=fare(v,s.km),d=disc(f.total,s);return{s,v,f,d,pay:f.total-d}}
+function fillCity(id){$(id).innerHTML=Object.keys(C).sort().map(c=>`<option>${c}</option>`).join("")}
+function fillArea(c,a){$(a).innerHTML=C[$(c).value][2].map(x=>`<option>${x}</option>`).join("")}
+function draw(){const {s,f,d,pay}=calc();$("dist").textContent=s.km?`${s.fc} → ${s.tc} · ~${s.km} km road distance`:"Choose different pickup and drop areas";$("veh").innerHTML=V.map(v=>{const x=fare(v,s.km);return`<button class="v" aria-pressed="${v.id===veh}" data-v="${v.id}"><span class="e">${v.e}</span><div>${v.n}<small>${v.s}</small></div><strong>₹${s.km?x.total:"–"}</strong></button>`}).join("");$("offers").innerHTML=O.map(o=>{const el=f.total>=o.min&&o.ok(s);return`<button class="o" aria-pressed="${off===o.c}" data-o="${o.c}"><b>${o.c}</b>${o.t}<span>${o.d}</span><em>${el?"✓ Eligible":"Not eligible"}</em></button>`}).join("");$("sum").innerHTML=s.km?`<div><span>Base + distance</span><span>₹${f.base}</span></div>${f.sur?`<div><span>${f.night?"Night":"Peak hour"} surcharge</span><span>₹${f.sur}</span></div>`:""}${f.toll?`<div><span>Toll estimate</span><span>₹${f.toll}</span></div>`:""}${d?`<div><span>Offer ${off}</span><span>−₹${d}</span></div>`:""}<div class="t"><span>Total</span><span>₹${pay}</span></div><div class="ver">✔ Fare verified</div>`:"<p class='loc'>Select pickup and drop to see the fare.</p>"}
+document.addEventListener("click",e=>{const v=e.target.closest("[data-v]"),o=e.target.closest("[data-o]");if(v){veh=v.dataset.v;draw()}if(o){off=off===o.dataset.o?null:o.dataset.o;draw()}});
+["fc","tc"].forEach(id=>$(id).onchange=()=>{fillArea(id,id==="fc"?"fa":"ta");draw()});
+["fa","ta"].forEach(id=>$(id).onchange=draw);
+let mode="up";
+const setMode=m=>{mode=m;$("tUp").className=m==="up"?"on":"";$("tIn").className=m==="in"?"on":"";$("nmW").classList.toggle("hide",m!=="up");$("aGo").textContent=m==="up"?"Create account":"Sign in"};
+$("tUp").onclick=()=>setMode("up");
+$("tIn").onclick=()=>setMode("in");
+const users=()=>{try{return JSON.parse(S.get("vz_u")||"{}")}catch(e){return{}}};
+$("aGo").onclick=()=>{const em=$("phone").value.trim().toLowerCase(),pw=$("pw").value,nm=$("nm").value.trim();if(!em||!pw)return;$("auth").classList.add("hide");$("app").classList.remove("hide");$("bn").classList.remove("hide");$("out").classList.remove("hide");$("hi").textContent="Welcome, "+(nm||"User")+"!";draw()};
+$("out").onclick=()=>location.reload();
+$("theme").onclick=()=>{const d=document.documentElement;d.dataset.theme=d.dataset.theme==="dark"?"light":"dark"};
+$("book").onclick=()=>{const c=calc();if(!c.s.km){$("berr").textContent="Pickup and drop must be different.";return}rides.unshift({from:`${c.s.fa}, ${c.s.fc}`,to:`${c.s.ta}, ${c.s.tc}`,v:c.v,pay:c.pay,pm:$("pm").value,st:0});draw();paint();setTimeout(()=>{if(rides[0]){rides[0].st=1;paint()}},2500);setTimeout(()=>{if(rides[0]){rides[0].st=2;paint()}},9000);setTimeout(()=>{if(rides[0]){rides[0].st=3;paint()}},16000)};
+function paint(){$("rides").innerHTML=rides.length?rides.map(r=>`<div class="card ride"><span class="st">${["🔎 Finding a captain…","🚗 Captain on the way","🛣️ Ride in progress","✅ Completed"][r.st]}</span><h3>${r.v.e} ${r.from} → ${r.to}</h3><p class="loc">₹${r.pay} · ${r.v.n} · ${r.pm}</p></div>`).join(""):"<p class='loc'>No rides yet.</p>"}
+document.getElementById("bn").onclick=e=>{const g=e.target.dataset.go;if(g)$(g).scrollIntoView({behavior:"smooth"})};
+fillCity("fc");
+fillCity("tc");
+$("fc").value="Chennai";
+$("tc").value="Madurai";
+fillArea("fc","fa");
+fillArea("tc","ta");
+draw();
+</script>
+</body>
+</html>
